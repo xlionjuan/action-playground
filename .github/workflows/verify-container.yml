@@ -1,0 +1,28 @@
+name: Verify container
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+    cosign:
+      name: Verify container with Cosign
+      runs-on: ubuntu-24.04-arm
+      steps:
+        - name: Install Cosign
+          uses: sigstore/cosign-installer@v3.7.0
+
+        - name: Verify
+          run: |
+            cosign verify --rekor-url=https://rekor.sigstore.dev \
+            --certificate-identity-regexp "https://github.com/xlionjuan/.*" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            ghcr.io/xlionjuan/fedora-createrepo-image:latest
+
+    gh:
+      name: Verify container with gh
+      runs-on: ubuntu-24.04-arm
+      steps:
+        - name: Verify
+          run: gh attestation verify --owner xlionjuan oci://ghcr.io/xlionjuan/fedora-createrepo-image:latest

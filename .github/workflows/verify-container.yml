@@ -28,5 +28,5 @@ jobs:
           env:
             GH_TOKEN: ${{ github.token }}
           run: |
-            sudo chown -R runner:runner /home/runneradmin/
+            #sudo chown -R runner:runner /home/runneradmin/
             gh attestation verify --owner xlionjuan oci://ghcr.io/xlionjuan/fedora-createrepo-image:latest
